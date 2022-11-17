@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option go_package = "github.com/kameshsampath/istio-grpc-example/pkg/greeter";
+
+package greeter;
+
+service Greeter {
+	rpc Greet(GreetRequest) returns (GreetResponse) {};
+}
+
+message GreetRequest {
+  string name = 1;
+}
+
+message GreetResponse {
+  string message = 2;
+  string version = 1;
+}

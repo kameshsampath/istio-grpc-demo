@@ -1,0 +1,18 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: greeter-weights
+  namespace: demos
+spec:
+  hosts:
+  - greeter.demos.svc.cluster.local
+  http:
+  - route:
+    - destination:
+        host: greeter.demos.svc.cluster.local
+        subset: v1
+      weight: 20
+    - destination:
+        host: greeter.demos.svc.cluster.local
+        subset: v2
+      weight: 80

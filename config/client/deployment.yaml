@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: greeter-client
+spec:
+  selector:
+    matchLabels:
+      app: greeter-client
+  template:
+    metadata:
+      annotations:
+        inject.istio.io/templates: grpc-agent
+        proxy.istio.io/config: '{"holdApplicationUntilProxyStarts": true}'
+      labels:
+        app: greeter-client
+    spec:
+      containers:
+      - name: greeter-client
+        image: ko://github.com/kameshsampath/istio-grpc-example/cmd/client
+        args:
+          - "-name"
+          - "greeter"
+          - "-namespace"
+          - "demos"
+          - "-port"
+          - "9090"
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
