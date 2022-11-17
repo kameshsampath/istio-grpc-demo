@@ -25,10 +25,12 @@ func main() {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
+
 	// using xDS for security configuration via discovery
-	creds, err := creds.NewServerCredentials(creds.ServerOptions{
-		FallbackCreds: insecure.NewCredentials(),
-	})
+	creds, err := creds.NewClientCredentials(
+		creds.ClientOptions{
+			FallbackCreds: insecure.NewCredentials(),
+		})
 
 	if err != nil {
 		log.Fatal(err)
@@ -46,13 +48,13 @@ func main() {
 	client := greeter.NewGreeterClient(con)
 
 	for {
-		message, err := client.Greet(ctx, &greeter.GreetRequest{
+		message, err := client.Greet(context.Background(), &greeter.GreetRequest{
 			Name: "guruji",
 		})
 		if err != nil {
 			log.Printf("Call failed with error: %v", err)
 		}
-		if err != nil {
+		if err == nil {
 			log.Printf("%s-%s", message.Message, message.Version)
 		}
 		time.Sleep(5 * time.Second)
