@@ -1,0 +1,6 @@
+namespace: demos
+
+resources:
+  - v1
+  - v2
+  - service.yaml

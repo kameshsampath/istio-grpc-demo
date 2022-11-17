@@ -39,20 +39,18 @@ steps:
    --go_out=./pkg/greeter --go-grpc_out=./pkg/greeter \
    --go_opt=paths=source_relative --go-grpc_opt=paths=source_relative
 
-## TODO this not working why???
-- name: deploy server
-  image: kameshsampath/kube-dev-tools:0.1.0
+- name: server compile
+  image: golang:1.19
   commands:
-    - k3d kubeconfig get $K3D_CLUSTER_NAME > $KUBECONFIG
-    - chmod 0700 $KUBECONFIG
-    - kubectl create ns demos || true
-    - kubectl label ns demos istio-injection=enabled --overwrite=true
-    - kubens demos
-    - ko create --insecure-registry -f config
-    # simple docker pull and pushes works
-    # - docker pull busybox:latest
-    # - docker tag nginx:latest $KO_DOCKER_REPO/busybox:latest
-    # - docker push $KO_DOCKER_REPO/busybox:latest
+    - rm -rf ./cmd/server/server
+    - go build -o ./cmd/server/server ./cmd/server/main.go
+
+- name: build server image
+  image: plugins/docker
+  settings:
+    insecure: true
+    dockerfile: ./cmd/server/Dockerfile
+    context: ./cmd/server
   volumes:
     - name: docker-sock
       path: /var/run/docker.sock

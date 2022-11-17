@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: greeter
-        image: ko://github.com/kameshsampath/istio-grpc-example/cmd/server
+        image: ${PLUGIN_REPO}
         env:
           - name: VERSION
             value: v1

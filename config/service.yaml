@@ -6,5 +6,7 @@ spec:
   selector:
     app: greeter
   ports:
-  - port: 9090
-    name: grpc
+  - name: grpc
+    port: 9090
+    targetPort: 9090
+    

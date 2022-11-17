@@ -29,7 +29,8 @@ func main() {
 	greeter.RegisterGreeterServer(s, &impl.SimpleGreeterServer{})
 
 	// Listener where there service listens
-	lis, err := net.Listen("tcp4", ":9090")
+	lis, err := net.Listen("tcp", ":9090")
+	log.Printf("Server Listening, %s", lis.Addr())
 	if err != nil {
 		log.Fatal(err)
 	}
